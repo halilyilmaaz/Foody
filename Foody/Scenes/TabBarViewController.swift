@@ -31,7 +31,6 @@ class TabBarController: UITabBarController {
 
         viewControllers = [
             createNavController(for: HomeViewController(), title: "Foody", image: UIImage(systemName: "house")!),
-            createNavController(for: DiscoveryViewController(), title: "Keşfet", image: UIImage(systemName: "scribble")!),
             createNavController(for: SearchViewController(), title: "", image: UIImage(systemName: "magnifyingglass")!),
             createNavController(for: ProfilViewController(), title: "", image: UIImage(systemName: "person")!)
         ]
