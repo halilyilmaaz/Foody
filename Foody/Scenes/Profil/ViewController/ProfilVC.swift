@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-
 class ProfilViewController: UIViewController {
     var isFollowShow: Bool = true
     var viewModel = ProfileViewModel()
@@ -35,6 +34,11 @@ class ProfilViewController: UIViewController {
         return segment
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        viewModel.fetchRecipe()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -47,8 +51,10 @@ class ProfilViewController: UIViewController {
         setupNavigationBar()
         
         viewModel.didUpdateUser = { [weak self] user in
-            self?.updateUserProfile(user)
-            self?.tvMain.reloadData()
+            DispatchQueue.main.async {
+                self?.updateUserProfile(user)
+                self?.tvMain.reloadData()
+            }
         }
         viewModel.fetchUserProfil()
         
@@ -129,29 +135,30 @@ extension ProfilViewController: UITableViewDelegate, UITableViewDataSource {
             cell.pickerBtn.isHidden = !isFollowShow
             return cell
         case .recipeList:
+            if viewModel.recipes.isEmpty {
+                let cell = UITableViewCell()
+                return cell
+            } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: RecipeCardTableViewCell.identifier, for: indexPath) as! RecipeCardTableViewCell
                 cell.selectionStyle = .none
                 cell.delegateLike = self
 
                 let recipeIndex = indexPath.row
-                let recipe: RecipeCardModel?
-                
+                let recipe = viewModel.recipes[recipeIndex]
 
-                if recipeIndex >= 0 && recipeIndex <= viewModel.recipes.count {
-                    recipe = viewModel.recipes[recipeIndex]
-                    cell.titleLbl.text = viewModel.recipes[recipeIndex].title
-                    cell.howManyPerson = viewModel.recipes[recipeIndex].howManyPersonFor
-                    cell.recipeTime = viewModel.recipes[recipeIndex].recipeTime
-                    cell.materialsCount = viewModel.recipes[recipeIndex].materials.count
-                    if let imageURL = URL(string: viewModel.recipes[recipeIndex].photoURL) {
-                        cell.recipeImage.kf.setImage(with: imageURL)
-                    } else {
-                        cell.recipeImage.image = nil
-                    }
+                cell.titleLbl.text = recipe.title
+                cell.personCount.text = recipe.howManyPersonFor.description
+                cell.timeValue.text = recipe.recipeTime.description
+                cell.materialsCount.text = recipe.materials.count.description
+
+                if let imageURL = URL(string: recipe.photoURL) {
+                    cell.recipeImage.kf.setImage(with: imageURL)
                 } else {
-                    recipe = nil
+                    cell.recipeImage.image = nil
                 }
+
                 return cell
+            }
 
         }
     }

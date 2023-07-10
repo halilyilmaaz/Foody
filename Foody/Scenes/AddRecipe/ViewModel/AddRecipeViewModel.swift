@@ -22,15 +22,40 @@ class AddRecipeViewModel {
                 switch result {
                 case .success(let url):
                     photoURL = url
-                    self.saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor, completion: completion)
+                    self.saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                        if success {
+                            self.homeRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                                if success {
+                                    completion(true, nil)
+                                } else {
+                                    completion(false, error)
+                                }
+                            }
+                        } else {
+                            completion(false, error)
+                        }
+                    }
                 case .failure(let error):
                     completion(false, error)
                 }
             }
         } else {
-            saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor, completion: completion)
+            saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                if success {
+                    self.homeRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                        if success {
+                            completion(true, nil)
+                        } else {
+                            completion(false, error)
+                        }
+                    }
+                } else {
+                    completion(false, error)
+                }
+            }
         }
     }
+
 
     private func uploadPhoto(_ photo: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
         guard let imageData = photo.jpegData(compressionQuality: 0.8) else {
@@ -75,6 +100,35 @@ class AddRecipeViewModel {
         }
         
         let collectionRef = Firestore.firestore().collection("recipies").document(userUID).collection(userUID)
+        
+        collectionRef.addDocument(data: data) { error in
+            if let error = error {
+                completion(false, error)
+            } else {
+                completion(true, nil)
+            }
+        }
+    }
+
+    private func homeRecipe(photoURL: String?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int, completion: @escaping (Bool, Error?) -> Void) {
+        guard let userUID = Auth.auth().currentUser?.uid else {
+            completion(false, nil)
+            return
+        }
+
+        var data: [String: Any] = [
+            "title": title,
+            "subTitle": subTitle,
+            "recipeTime": recipeTime,
+            "materials": materials,
+            "howManyPersonFor": howManyPersonFor
+        ]
+
+        if let photoURL = photoURL {
+            data["photoURL"] = photoURL
+        }
+
+        let collectionRef = Firestore.firestore().collection("homeRecipies")
         let documentRef = collectionRef.addDocument(data: data) { error in
             if let error = error {
                 completion(false, error)
@@ -82,7 +136,7 @@ class AddRecipeViewModel {
                 completion(true, nil)
             }
         }
-        
+
         documentRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 let detailId = document.documentID

@@ -16,9 +16,9 @@ class ProfileViewModel {
     var didUpdateUser: ((User?) -> Void)?
     let profileService = ProfileService.shared
     
-    var recipes: [RecipeCardModel] = []
+    var recipes: [HomeRecipeCardModel] = []
     
-    var didUpdateRecipies: (([RecipeCardModel]?, Error?) -> Void)?
+    var didUpdateRecipies: (([HomeRecipeCardModel]?, Error?) -> Void)?
     
     
     func fetchUserProfil() {

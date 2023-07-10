@@ -35,7 +35,7 @@ class ProfileService {
     }
     
     
-    func fetchRecipeList(completion: @escaping ([RecipeCardModel]?, Error?) -> Void) {
+    func fetchRecipeList(completion: @escaping ([HomeRecipeCardModel]?, Error?) -> Void) {
         guard let userUID = Auth.auth().currentUser?.uid else {
             completion(nil, nil)
             return
@@ -43,13 +43,13 @@ class ProfileService {
         
         let collectionRef = db.collection("recipies").document(userUID).collection(userUID)
         
-        collectionRef.addSnapshotListener { (querySnapshot, error) in
+        collectionRef.getDocuments { (querySnapshot, error) in
             if let error = error {
                 completion(nil, error)
                 return
             }
             
-            var recipes: [RecipeCardModel] = []
+            var recipes: [HomeRecipeCardModel] = []
             
             let dispatchGroup = DispatchGroup() // DispatchGroup oluşturuldu
             
@@ -63,7 +63,7 @@ class ProfileService {
                 let materials = recipeData["materials"] as? [String] ?? []
                 let howManyPersonFor = recipeData["howManyPersonFor"] as? Int ?? 1
                 
-                var recipe = RecipeCardModel(title: title, description: description, recipeTime: recipeTime, photoURL: photoURL, materials: materials, howManyPersonFor: howManyPersonFor)
+                var recipe = HomeRecipeCardModel(title: title, description: description, recipeTime: recipeTime, photoURL: photoURL, materials: materials, howManyPersonFor: howManyPersonFor)
                 
                 // Fotoğrafın indirilmesi için DispatchGroup'a girildi
                 dispatchGroup.enter()
@@ -89,7 +89,6 @@ class ProfileService {
             }
         }
     }
-
     
     func deleteRecipe(documentID: String, completion: @escaping (Bool, Error?) -> Void) {
         guard let userUID = Auth.auth().currentUser?.uid else {

@@ -19,17 +19,17 @@ class AddRecipeVC: UIViewController {
     }
     
     private var recipeName: String?
-     private var recipeDetail: String?
-     private var recipeTime: Int?
-     private var preparationTime: String?
-     private var howManyPersonFor: Int?
+    private var recipeDetail: String?
+    private var recipeTime: Int?
+    private var preparationTime: String?
+    private var howManyPersonFor: Int?
     
     private var nameTextField: UITextField?
     private var recipeTextField: UITextField?
     private var recipeTimeTextField: UITextField?
     private var preparationTimeTextField: UITextField?
     private var howManyPersonTextField: UITextField?
-
+    
     
     lazy var viewModel = AddRecipeViewModel()
     

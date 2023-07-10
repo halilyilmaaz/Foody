@@ -13,7 +13,7 @@ import Kingfisher
 
 class DetailRecipeVC: UIViewController {
     
-    var recipe: RecipeCardModel?
+    var recipe: HomeRecipeCardModel?
     var detailId: Int?
     
     var sections: [[DetailRecipeSection]] {

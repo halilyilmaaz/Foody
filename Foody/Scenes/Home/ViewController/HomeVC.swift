@@ -9,9 +9,8 @@ import UIKit
 
 class HomeViewController: UIViewController, UIViewControllerTransitioningDelegate {
     
-    var viewModel: HomeViewModel {
-        .init()
-    }
+    var viewModel: HomeViewModel = HomeViewModel()
+    
     
     private let tvMain: UITableView = {
         let tv = UITableView()
@@ -25,12 +24,25 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
         view.backgroundColor = .systemBackground
         self.tvMain.delegate = self
         self.tvMain.dataSource = self
-        self.tvMain.reloadData()
         setupUI()
         registerCell()
         
         let share = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
         navigationItem.rightBarButtonItem = share
+        
+        viewModel.didFetchRecipies = { [weak self] recipes, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.viewModel.recipies = recipes ?? []
+                self?.tvMain.reloadData()
+            }
+        }
+        
+        viewModel.fetchHomeRecipe()
 
     }
     
@@ -52,10 +64,7 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
                     }
                 }
             }
-            
-
         }
-        
     }
     
     
@@ -76,56 +85,46 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.recipies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RecipeCardTableViewCell.identifier, for: indexPath) as! RecipeCardTableViewCell
         cell.selectionStyle = .none
-//        cell.delegateShare = self
         cell.delegateLike = self
-     
+
+        let recipe = viewModel.recipies[indexPath.row]
+        cell.titleLbl.text = recipe.title
+        cell.personCount.text = recipe.howManyPersonFor.description
+        cell.timeValue.text = recipe.recipeTime.description
+        cell.materialsCount.text = recipe.materials.count.description
+        if let imageURL = URL(string: recipe.photoURL) {
+            cell.recipeImage.kf.setImage(with: imageURL)
+        } else {
+            cell.recipeImage.image = nil
+        }
         return cell
-        
     }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedRecipe = indexPath.row
-//        let VC = DetailRecipeVC()
-//        vc.detailId = selectedRecipe
-        let detailRecipeVC = DetailRecipeVC()
+        
+        let selectedRecipe = viewModel.recipies[indexPath.row]
 
+        let detailRecipeVC = DetailRecipeVC()
+        detailRecipeVC.recipe = selectedRecipe
+        detailRecipeVC.detailId = indexPath.row
         let navigationController = UINavigationController(rootViewController: detailRecipeVC)
         navigationController.modalPresentationStyle = .fullScreen
 
-        // Present the navigationController
         present(navigationController, animated: true, completion: nil)
 
     }
-    
 }
 
-//extension HomeViewController: RecipeCardTableViewCellShareDelegate {
-//    func didTapShareButton() {
-//        print("share tapped")
-//        
-//    }
-//}
 extension HomeViewController: RecipeCardTableViewCellLikeDelegate {
     func didTapLikeButton() {
         print("like tapped")
     }
 }
-
-
-
-
-
-//extension HomeViewController: RecipeCardTableViewCellDelegate {
-//    func didTapCardDetail() {
-//        print("tapped")
-//    }
-//}
-
-

@@ -79,11 +79,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MaterialListCell.identifier, for: indexPath) as! MaterialListCell
         cell.sectionLabel.text = viewModel.materialsTool[indexPath.section].list[indexPath.row]
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        view.tintColor = .systemOrange.withAlphaComponent(0.9)
+        view.tintColor = .gray.withAlphaComponent(0.9)
+        view.layer.cornerRadius = 6
+        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        view.layer.cornerCurve = .circular
+        view.clipsToBounds = true
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

@@ -10,6 +10,9 @@ import Foundation
 class HomeViewModel {
     
     var didSignOut: (() -> Void)?
+    var didFetchRecipies: (([HomeRecipeCardModel]?, Error?) -> Void)?
+    
+    var recipies: [HomeRecipeCardModel] = []
     
     func logOut(){
         AuthService.shared.logOut { [weak self] error in
@@ -22,6 +25,18 @@ class HomeViewModel {
                 print("başarılı")
             }
             
+        }
+    }
+    
+    func fetchHomeRecipe() {
+        HomeService.shared.fetchHomeRecipe { recipes, error in
+            if let error = error {
+                print("Error fetching home recipes: 🚩\(error)")
+                
+            } else {
+                self.recipies = recipes ?? []
+                self.didFetchRecipies?(recipes,nil)
+            }
         }
     }
 }

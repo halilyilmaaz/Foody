@@ -22,31 +22,9 @@ class RecipeCardTableViewCell: UITableViewCell {
     
     weak var delegate: RecipeCardTableViewCellDelegate?
     weak var delegateLike: RecipeCardTableViewCellLikeDelegate?
-    
-    var howManyPerson: Int = 0 {
-        didSet {
-            DispatchQueue.main.async {
-                self.howManyPersonLbl.iconAndLabel(icon: "person.fill", label: "\(self.howManyPerson) kişilik")
-            }
-        }
-    }
-    var recipeTime: Int = 0 {
-        didSet {
-            DispatchQueue.main.async {
-                self.cookingTimeLbl.iconAndLabel(icon: "clock.fill", label: "\(self.recipeTime) dk hazırlık")
-            }
-        }
-    }
-    
-    var materialsCount: Int = 0 {
-        didSet {
-            self.howManyMaterialsLbl.iconAndLabel(icon: "clock.fill", label: "Malzemeler \(materialsCount)")
-        }
-    }
 
     private let stackV: UIStackView = {
         let stackV = UIStackView()
-        //stackV.axis = .vertical
         stackV.layer.cornerRadius = 6
         return stackV
     }()
@@ -81,7 +59,6 @@ class RecipeCardTableViewCell: UITableViewCell {
         let view = UIView()
         view.layer.borderWidth = 0.3
         view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.borderWidth = 0.5
         view.layer.cornerRadius = 6
         view.backgroundColor = .gray.withAlphaComponent(0.6)
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -98,7 +75,42 @@ class RecipeCardTableViewCell: UITableViewCell {
         return lbl
     }()
     
-    let howManyPersonLbl: UILabel = {
+    // MARK: Row 1
+    let row1: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        return view
+    }()
+    
+    let personIcon: UIImageView = {
+        let icon = UIImageView()
+        icon.image = UIImage(named: "person.fill")
+        return icon
+    }()
+    
+    let personCount: UILabel = {
+        let lbl = UILabel()
+        lbl.numberOfLines = 0
+        lbl.textColor = .white
+        lbl.font = .systemFont(ofSize: 12, weight: .regular)
+        return lbl
+    }()
+    
+
+    // MARK: Row 2
+    let row2: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        return view
+    }()
+    
+    let clockIcon: UIImageView = {
+        let icon = UIImageView()
+        icon.image = UIImage(named: "person.fill")
+        return icon
+    }()
+    
+    let timeValue: UILabel = {
         let lbl = UILabel()
         lbl.numberOfLines = 0
         lbl.textColor = .white
@@ -107,15 +119,20 @@ class RecipeCardTableViewCell: UITableViewCell {
     }()
     
     
-    let cookingTimeLbl: UILabel = {
-        let lbl = UILabel()
-        lbl.numberOfLines = 0
-        lbl.textColor = .white
-        lbl.font = .systemFont(ofSize: 12, weight: .regular)
-        return lbl
+    // MARK: Row 3
+    let row3: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        return view
     }()
     
-    let howManyMaterialsLbl: UILabel = {
+    let materialsIcon: UIImageView = {
+        let icon = UIImageView()
+        icon.image = UIImage(named: "person.fill")
+        return icon
+    }()
+    
+    let materialsCount: UILabel = {
         let lbl = UILabel()
         lbl.numberOfLines = 0
         lbl.textColor = .white
@@ -153,9 +170,19 @@ class RecipeCardTableViewCell: UITableViewCell {
 
         recipeImage.addSubview(emptyCardView)
         bottomContainer.addSubview(titleLbl)
-        bottomContainer.addSubview(howManyPersonLbl)
-        bottomContainer.addSubview(cookingTimeLbl)
-        bottomContainer.addSubview(howManyMaterialsLbl)
+        bottomContainer.addSubview(row1)
+        bottomContainer.addSubview(row2)
+        bottomContainer.addSubview(row3)
+        
+        row1.addSubview(personIcon)
+        row1.addSubview(personCount)
+        
+        row2.addSubview(clockIcon)
+        row2.addSubview(timeValue)
+        
+        row3.addSubview(materialsIcon)
+        row3.addSubview(materialsCount)
+        
         
         bottomContainer.addSubview(likeButton)
         
@@ -190,19 +217,63 @@ class RecipeCardTableViewCell: UITableViewCell {
             make.leading.equalToSuperview().offset(10)
         }
         
-        howManyPersonLbl.snp.makeConstraints { make in
+        row1.snp.makeConstraints { make in
             make.top.equalTo(titleLbl.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(10)
+            make.width.equalTo(60)
         }
         
-        cookingTimeLbl.snp.makeConstraints { make in
-            make.top.equalTo(howManyPersonLbl.snp.bottom).offset(5)
+        personIcon.snp.makeConstraints { make in
+            make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview()
+            make.width.equalTo(50)
         }
         
-        howManyMaterialsLbl.snp.makeConstraints { make in
-            make.top.equalTo(cookingTimeLbl.snp.bottom).offset(5)
+        personCount.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-10)
+            make.bottom.equalToSuperview()
+        }
+        
+        
+        
+        row2.snp.makeConstraints { make in
+            make.top.equalTo(row1.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(10)
+            make.width.equalTo(60)
+        }
+        
+        clockIcon.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview()
+            make.width.equalTo(50)
+        }
+        
+        timeValue.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-10)
+            make.bottom.equalToSuperview()
+        }
+        
+        row3.snp.makeConstraints { make in
+            make.top.equalTo(row2.snp.bottom).offset(5)
+            make.leading.equalToSuperview().offset(10)
+            make.width.equalTo(60)
+        }
+        
+        materialsIcon.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview()
+            make.width.equalTo(50)
+        }
+        
+        materialsCount.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-10)
+            make.bottom.equalToSuperview()
         }
         
         likeButton.snp.makeConstraints { make in

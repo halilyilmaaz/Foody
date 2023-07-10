@@ -71,6 +71,8 @@
 		9DD9BA032A542DFB0007EDB1 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9DD9BA022A542DFB0007EDB1 /* Kingfisher */; };
 		9DD9BA062A54D5160007EDB1 /* RecipeDeleteBtnCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA052A54D5160007EDB1 /* RecipeDeleteBtnCell.swift */; };
 		9DD9BA082A55FFD50007EDB1 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA072A55FFD50007EDB1 /* SearchService.swift */; };
+		9DD9BA0F2A583E5A0007EDB1 /* HomeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA0E2A583E5A0007EDB1 /* HomeService.swift */; };
+		9DD9BA112A587C920007EDB1 /* HomeRecipeCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA102A587C920007EDB1 /* HomeRecipeCardModel.swift */; };
 		9DE036792A2DF34E00412B4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE036782A2DF34E00412B4D /* AppDelegate.swift */; };
 		9DE0367B2A2DF34E00412B4D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE0367A2A2DF34E00412B4D /* SceneDelegate.swift */; };
 		9DE0367D2A2DF34E00412B4D /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE0367C2A2DF34E00412B4D /* HomeVC.swift */; };
@@ -163,6 +165,8 @@
 		9DD9B9FF2A50BD490007EDB1 /* RecipeCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardModel.swift; sourceTree = "<group>"; };
 		9DD9BA052A54D5160007EDB1 /* RecipeDeleteBtnCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDeleteBtnCell.swift; sourceTree = "<group>"; };
 		9DD9BA072A55FFD50007EDB1 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		9DD9BA0E2A583E5A0007EDB1 /* HomeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeService.swift; sourceTree = "<group>"; };
+		9DD9BA102A587C920007EDB1 /* HomeRecipeCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRecipeCardModel.swift; sourceTree = "<group>"; };
 		9DE036752A2DF34E00412B4D /* Foody.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Foody.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DE036782A2DF34E00412B4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9DE0367A2A2DF34E00412B4D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -253,6 +257,7 @@
 			children = (
 				9D71AD1A2A3A19AC00463620 /* Auth */,
 				9DD9B9FF2A50BD490007EDB1 /* RecipeCardModel.swift */,
+				9DD9BA102A587C920007EDB1 /* HomeRecipeCardModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -408,6 +413,7 @@
 				9D71AD172A3A18D200463620 /* AuthService.swift */,
 				9DD9B9DD2A4CEA970007EDB1 /* ProfileService.swift */,
 				9DD9BA072A55FFD50007EDB1 /* SearchService.swift */,
+				9DD9BA0E2A583E5A0007EDB1 /* HomeService.swift */,
 			);
 			path = Networks;
 			sourceTree = "<group>";
@@ -1007,6 +1013,7 @@
 				9DE036C92A2DFDF800412B4D /* LoginVC.swift in Sources */,
 				9DD9B9D92A4CA2290007EDB1 /* ProfileViewModel.swift in Sources */,
 				9D71ACF92A33405D00463620 /* RecipeLetterTableViewCell.swift in Sources */,
+				9DD9BA0F2A583E5A0007EDB1 /* HomeService.swift in Sources */,
 				9D71ACF22A32572E00463620 /* ConfirmButtonTableViewCell.swift in Sources */,
 				9D929EA52A3FA60000D227BD /* CircleButton.swift in Sources */,
 				9DE036FD2A321E9200412B4D /* AddRecipeVC.swift in Sources */,
@@ -1016,6 +1023,7 @@
 				9D27C4842A3A55BA00E3CAF5 /* LoginUserReq.swift in Sources */,
 				9DE036D32A2DFE9A00412B4D /* ProfilVC.swift in Sources */,
 				9DE0367B2A2DF34E00412B4D /* SceneDelegate.swift in Sources */,
+				9DD9BA112A587C920007EDB1 /* HomeRecipeCardModel.swift in Sources */,
 				9DD5082C2A3C9E32006C9E67 /* Validator.swift in Sources */,
 				9D71AD182A3A18D200463620 /* AuthService.swift in Sources */,
 				9D929E9F2A3FA12600D227BD /* OnboardingView.swift in Sources */,
