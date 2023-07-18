@@ -1,21 +1,26 @@
 //
-//  SearchVC.swift
+//  MaterialSelectionPresentVC.swift
 //  Foody
 //
-//  Created by halil yılmaz on 23.06.2023.
+//  Created by halil yılmaz on 12.07.2023.
 //
 
 import UIKit
 import SnapKit
 
+protocol MaterialSelectionPresentVCDelegate: AnyObject {
+    func didSelectMaterials(selectedItems: [String])
+}
 
-class SearchViewController: UIViewController {
+class MaterialSelectionPresentVC: UIViewController {
     
-    let searchController = UISearchController(searchResultsController: SearchResultVC())
+    weak var delegate: MaterialSelectionPresentVCDelegate?
     
-    var viewModel: SearchViewModel = SearchViewModel()
-    
-    private let tvMain: UITableView = {
+    var viewModel: MaterialSelectionPresentVM = {
+        .init()
+    }()
+
+    let tvMain: UITableView = {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.allowsSelection = true
@@ -23,26 +28,21 @@ class SearchViewController: UIViewController {
         return tv
     }()
     
-    let searchButton = CustomButton(title: "Ara", fontSize: .med, backgroundColor: .systemBlue)
+    let searchButton = CustomButton(title: "Ekle", fontSize: .med, backgroundColor: .systemBlue)
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
+        
         definesPresentationContext = true
-
-        definesPresentationContext = true
+        title = "Kullanılan malzemeleri işaretle"
         tvMain.delegate = self
         tvMain.dataSource = self
-        
+        tvMain.reloadData()
         setupUI()
         registerCell()
-        
-        if let searchResultVC = searchController.searchResultsController as? SearchResultVC {
-            viewModel.delegate = searchResultVC
-        }
     }
     
     func setupUI() {
@@ -50,54 +50,51 @@ class SearchViewController: UIViewController {
         view.addSubview(searchButton)
         
         tvMain.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-        }
+              make.top.equalToSuperview().offset(20)
+              make.leading.equalToSuperview().offset(15)
+              make.trailing.equalToSuperview().offset(-15)
+          }
+          
+          searchButton.snp.makeConstraints { make in
+              make.top.equalTo(tvMain.snp.bottom).offset(20)
+              make.leading.equalToSuperview().offset(20)
+              make.trailing.equalToSuperview().offset(-20)
+              make.bottom.equalToSuperview().offset(-30)
+              make.height.equalTo(46)
+          }
         
-        searchButton.snp.makeConstraints { make in
-            make.top.equalTo(tvMain.snp.bottom).offset(5)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
-            make.bottom.equalToSuperview().offset(-100)
-            make.height.equalTo(46)
-        }
-        
-        searchButton.addTarget(self, action: #selector(didTapSearchButton), for: .touchUpInside)
-    }
-    
-    @objc func didTapSearchButton(){
-        
-        let searchByMaterialsVC = SearchByMaterialsVC()
-        searchByMaterialsVC.keywordsList = self.viewModel.selectedItems
-        let navigationController = UINavigationController(rootViewController: searchByMaterialsVC)
-        navigationController.modalPresentationStyle = .fullScreen
-        
-        present(navigationController, animated: true, completion: nil)
+        searchButton.addTarget(self, action: #selector(didTapSearchBtn), for: .touchUpInside)
+ 
     }
     
     func registerCell(){
         tvMain.register(MaterialListCell.self, forCellReuseIdentifier: MaterialListCell.identifier)
     }
+    
+    @objc func didTapSearchBtn(){
+        print("tapped search")
+        delegate?.didSelectMaterials(selectedItems: viewModel.selectedItems)
+        presentingViewController?.dismiss(animated: true, completion: nil)
+    }
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension MaterialSelectionPresentVC: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.materialsTool.count
+        return viewModel.materialsTools.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.materialsTool[section].learnType
+        return viewModel.materialsTools[section].learnType
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.materialsTool[section].list.count
+        return viewModel.materialsTools[section].list.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MaterialListCell.identifier, for: indexPath) as! MaterialListCell
-        cell.sectionLabel.text = viewModel.materialsTool[indexPath.section].list[indexPath.row]
+        cell.sectionLabel.text = viewModel.materialsTools[indexPath.section].list[indexPath.row]
         return cell
     }
     
@@ -116,10 +113,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 46
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        let selectedValue = viewModel.materialsTool[indexPath.section].list[indexPath.row]
+        let selectedValue = viewModel.materialsTools[indexPath.section].list[indexPath.row]
         
         if cell?.accessoryType == .checkmark {
             cell?.accessoryType = .none
@@ -137,17 +133,4 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
 }
-
-
-extension SearchViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-            guard let text = searchController.searchBar.text else {
-                return
-            }
-            
-        viewModel.searchRecipes(withKeyword: text)
-        }
-}
-

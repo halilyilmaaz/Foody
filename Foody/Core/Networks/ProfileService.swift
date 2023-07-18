@@ -43,7 +43,7 @@ class ProfileService {
         
         let collectionRef = db.collection("recipies").document(userUID).collection(userUID)
         
-        collectionRef.getDocuments { (querySnapshot, error) in
+        collectionRef.order(by: "createdAt", descending: true).getDocuments { (querySnapshot, error) in
             if let error = error {
                 completion(nil, error)
                 return
@@ -55,16 +55,16 @@ class ProfileService {
             
             for document in querySnapshot!.documents {
                 let recipeData = document.data()
+                let recipeID = UUID() // Get the document ID here
                 
                 let title = recipeData["title"] as? String ?? ""
-                let description = recipeData["subTitle"] as? String ?? ""
-                let recipeTime = recipeData["recipeTime"] as? Int ?? 5
+                let subTitle = recipeData["subTitle"] as? String ?? ""
+                let recipeTime = recipeData["recipeTime"] as? Int ?? 0
                 let photoURL = recipeData["photoURL"] as? String ?? ""
                 let materials = recipeData["materials"] as? [String] ?? []
-                let howManyPersonFor = recipeData["howManyPersonFor"] as? Int ?? 1
+                let howManyPersonFor = recipeData["howManyPersonFor"] as? Int ?? 0
                 
-                var recipe = HomeRecipeCardModel(title: title, description: description, recipeTime: recipeTime, photoURL: photoURL, materials: materials, howManyPersonFor: howManyPersonFor)
-                
+                let recipe = HomeRecipeCardModel( title: title, description: subTitle, recipeTime: recipeTime, photoURL: photoURL, materials: materials, howManyPersonFor: howManyPersonFor) //
                 // Fotoğrafın indirilmesi için DispatchGroup'a girildi
                 dispatchGroup.enter()
                 
@@ -89,6 +89,7 @@ class ProfileService {
             }
         }
     }
+
     
     func deleteRecipe(documentID: String, completion: @escaping (Bool, Error?) -> Void) {
         guard let userUID = Auth.auth().currentUser?.uid else {

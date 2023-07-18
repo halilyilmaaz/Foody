@@ -1,13 +1,13 @@
 //
-//  HomeRecipeCardModel.swift
+//  MainCardSearchModel.swift
 //  Foody
 //
-//  Created by halil yılmaz on 7.07.2023.
+//  Created by halil yılmaz on 18.07.2023.
 //
 
 import Foundation
 
-class HomeRecipeCardModel {
+class MainCardSearchModel {
     let title: String
     let description: String
     let recipeTime: Int
@@ -15,8 +15,7 @@ class HomeRecipeCardModel {
     let materials: [String]
     let howManyPersonFor: Int
     
-    init( title: String, description: String, recipeTime: Int, photoURL: String, materials: [String], howManyPersonFor: Int) {
-
+    init(title: String, description: String, recipeTime: Int, photoURL: String, materials: [String], howManyPersonFor: Int) {
         self.title = title
         self.description = description
         self.recipeTime = recipeTime

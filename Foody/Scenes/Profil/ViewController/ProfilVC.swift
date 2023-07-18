@@ -132,7 +132,7 @@ extension ProfilViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             cell.addRecipeBtn.isHidden = !isFollowShow
             cell.followBtn.isHidden = isFollowShow
-            cell.pickerBtn.isHidden = !isFollowShow
+//            cell.pickerBtn.isHidden = !isFollowShow
             return cell
         case .recipeList:
             if viewModel.recipes.isEmpty {

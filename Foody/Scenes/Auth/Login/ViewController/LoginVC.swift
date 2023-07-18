@@ -18,7 +18,7 @@ class LoginViewController: UIViewController {
         return row
     }()
     
-    private let usernameTF = CustomTextField(fieldType: .username)
+    private let usernameTF = CustomTextField(fieldType: .email)
     private let passwordTF = CustomTextField(fieldType: .password)
  
     
@@ -248,6 +248,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func didTapRegisterBtn(){
+        print("tapped")
         navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
 

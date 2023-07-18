@@ -12,7 +12,7 @@ import FirebaseStorage
 
 class AddRecipeViewModel {
 
-    func addRecipe(photo: UIImage?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int, completion: @escaping (Bool, Error?) -> Void) {
+    func addRecipe(photo: UIImage?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int,createdAt: Date, completion: @escaping (Bool, Error?) -> Void) {
         // Öncelikle fotoğrafı veritabanına kaydedin.
         var photoURL: String? = nil
         if let photo = photo {
@@ -22,9 +22,9 @@ class AddRecipeViewModel {
                 switch result {
                 case .success(let url):
                     photoURL = url
-                    self.saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                    self.saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor, createdAt: createdAt) { success, error in
                         if success {
-                            self.homeRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                            self.homeRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor, createdAt: createdAt) { success, error in
                                 if success {
                                     completion(true, nil)
                                 } else {
@@ -40,9 +40,9 @@ class AddRecipeViewModel {
                 }
             }
         } else {
-            saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+            saveRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor, createdAt: createdAt) { success, error in
                 if success {
-                    self.homeRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor) { success, error in
+                    self.homeRecipe(photoURL: photoURL, title: title, subTitle: subTitle, recipeTime: recipeTime, materials: materials, howManyPersonFor: howManyPersonFor, createdAt: createdAt) { success, error in
                         if success {
                             completion(true, nil)
                         } else {
@@ -81,7 +81,7 @@ class AddRecipeViewModel {
           }
     }
 
-    private func saveRecipe(photoURL: String?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int, completion: @escaping (Bool, Error?) -> Void) {
+    private func saveRecipe(photoURL: String?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int, createdAt: Date, completion: @escaping (Bool, Error?) -> Void) {
         guard let userUID = Auth.auth().currentUser?.uid else {
             completion(false, nil)
             return
@@ -92,7 +92,8 @@ class AddRecipeViewModel {
             "subTitle": subTitle,
             "recipeTime": recipeTime,
             "materials": materials,
-            "howManyPersonFor": howManyPersonFor
+            "howManyPersonFor": howManyPersonFor,
+            "createdAt": createdAt
         ]
         
         if let photoURL = photoURL {
@@ -110,7 +111,7 @@ class AddRecipeViewModel {
         }
     }
 
-    private func homeRecipe(photoURL: String?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int, completion: @escaping (Bool, Error?) -> Void) {
+    private func homeRecipe(photoURL: String?, title: String, subTitle: String, recipeTime: Int, materials: [String], howManyPersonFor: Int, createdAt: Date, completion: @escaping (Bool, Error?) -> Void) {
         guard let userUID = Auth.auth().currentUser?.uid else {
             completion(false, nil)
             return
@@ -121,7 +122,8 @@ class AddRecipeViewModel {
             "subTitle": subTitle,
             "recipeTime": recipeTime,
             "materials": materials,
-            "howManyPersonFor": howManyPersonFor
+            "howManyPersonFor": howManyPersonFor,
+            "createdAt": createdAt
         ]
 
         if let photoURL = photoURL {

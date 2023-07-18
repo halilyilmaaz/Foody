@@ -27,9 +27,12 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
         setupUI()
         registerCell()
         
-        let share = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
-        navigationItem.rightBarButtonItem = share
-        
+//        let share = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+//        navigationItem.rightBarButtonItem = share
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         viewModel.didFetchRecipies = { [weak self] recipes, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -43,29 +46,9 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
         }
         
         viewModel.fetchHomeRecipe()
-
     }
     
-    @objc func shareTapped(){
-        AuthService.shared.logOut { [weak self] error in
-            guard self != nil else {
-                return
-            }
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                DispatchQueue.main.async {
-                    let splashScreenViewController = LoginViewController()
-                    let newNavigationController = UINavigationController(rootViewController: splashScreenViewController)
-                    
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let sceneDelegate = windowScene.delegate as? SceneDelegate {
-                        sceneDelegate.window?.rootViewController = newNavigationController
-                    }
-                }
-            }
-        }
-    }
+  
     
     
     func setupUI() {

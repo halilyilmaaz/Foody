@@ -41,7 +41,6 @@ class RecipeCardSearchCell: UITableViewCell {
     let title: UILabel = {
         let lbl = UILabel()
         lbl.numberOfLines = 1
-        lbl.text = "Some meal"
         lbl.font = UIFont.systemFont(ofSize: 18)
         return lbl
     }()
@@ -49,7 +48,6 @@ class RecipeCardSearchCell: UITableViewCell {
     let category: UILabel = {
         let lbl = UILabel()
         lbl.numberOfLines = 1
-        lbl.text = "vegan"
         lbl.font = UIFont.systemFont(ofSize: 12)
         return lbl
     }()
@@ -100,6 +98,10 @@ class RecipeCardSearchCell: UITableViewCell {
         }
         
         
+    }
+    
+    func setData(_ model: HomeRecipeCardModel){
+        title.text = model.title
     }
 
 }

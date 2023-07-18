@@ -15,8 +15,7 @@ class HomeService {
     
     func fetchHomeRecipe(completion: @escaping ([HomeRecipeCardModel]?, Error?) -> Void) {
         let collectionRef = db.collection("homeRecipies")
-        
-        collectionRef.getDocuments { (querySnapshot, error) in
+        collectionRef.order(by: "createdAt", descending: true).getDocuments { (querySnapshot, error) in
             if let error = error {
                 completion(nil, error)
                 return
@@ -27,6 +26,7 @@ class HomeService {
             
             for document in querySnapshot!.documents {
                 let recipeData = document.data()
+                let recipeID = UUID() // Get the document ID here
                 
                 let title = recipeData["title"] as? String ?? ""
                 let subTitle = recipeData["subTitle"] as? String ?? ""
@@ -35,7 +35,7 @@ class HomeService {
                 let materials = recipeData["materials"] as? [String] ?? []
                 let howManyPersonFor = recipeData["howManyPersonFor"] as? Int ?? 0
                 
-                var recipe = HomeRecipeCardModel(title: title, description: subTitle, recipeTime: recipeTime, photoURL: photoURL, materials: materials, howManyPersonFor: howManyPersonFor)
+                let recipe = HomeRecipeCardModel(title: title, description: subTitle, recipeTime: recipeTime, photoURL: photoURL, materials: materials, howManyPersonFor: howManyPersonFor) // Use the ID parameter here
                 recipes.append(recipe)
                 
                 dispatchGroup.enter() // DispatchGroup'a giriyoruz
@@ -58,6 +58,7 @@ class HomeService {
             }
         }
     }
+
 
     
     

@@ -18,6 +18,8 @@ class AddRecipeVC: UIViewController {
         ]
     }
     
+    var selectedMaterials: [String] = []
+        
     private var recipeName: String?
     private var recipeDetail: String?
     private var recipeTime: Int?
@@ -31,7 +33,13 @@ class AddRecipeVC: UIViewController {
     private var howManyPersonTextField: UITextField?
     
     
-    lazy var viewModel = AddRecipeViewModel()
+    var viewModel: AddRecipeViewModel = {
+        .init()
+    }()
+    
+    var materialViewModel: MaterialSelectionPresentVM = {
+        .init()
+    }()
     
     private let tvMain: UITableView = {
         let tv = UITableView()
@@ -58,6 +66,7 @@ class AddRecipeVC: UIViewController {
         registerCell()
         keyboardSettings()
         setupNavigationBar()
+        print("\(materialViewModel.selectedItems.description) *-*-*-*-*-*-*-*-*-*-*-*-*-")
     }
     
     func setupNavigationBar() {
@@ -140,28 +149,45 @@ extension AddRecipeVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .tfs:
             let cell = tableView.dequeueReusableCell(withIdentifier: PropertiesTextFieldsCell.identifier, for: indexPath) as! PropertiesTextFieldsCell
+            cell.delegate = self
+            cell.delegate = self
             cell.nameTextFieldDelegate = self
             cell.recipeTextFieldDelegate = self
             cell.recipeTimeTextFieldDelegate = self
             cell.preparationTimeTextFieldDelegate = self
             cell.howManyPersonTextFieldDelegate = self
+//            cell.materilasLbl.text = materialViewModel.selectedItems.description
 
             nameTextField = cell.nameTextField
             recipeTextField = cell.recipeTextField
             recipeTimeTextField = cell.recipeTimeTextField
-//            preparationTimeTextField = cell.preparationTimeTextField
             howManyPersonTextField = cell.howManyPersonTextField
+            
             return cell
         case .confirmBtn:
             let cell = tableView.dequeueReusableCell(withIdentifier: ConfirmButtonTableViewCell.identifier, for: indexPath) as! ConfirmButtonTableViewCell
                     cell.delegate = self
                     return cell
         }
-        
     }
-    
 }
 
+extension AddRecipeVC: PropertiesTextFieldsCellProtocol {
+    func didTapSelectMaterialButton() {
+        let materialSelectionVC = MaterialSelectionPresentVC()
+        materialSelectionVC.delegate = self
+        present(materialSelectionVC, animated: true)
+    }
+}
+extension AddRecipeVC: MaterialSelectionPresentVCDelegate {
+    func didSelectMaterials(selectedItems: [String]) {
+        print("\(selectedItems) ??????????")
+        if let cell = tvMain.cellForRow(at: IndexPath(row: 0, section: 1)) as? PropertiesTextFieldsCell {
+            cell.materilasLbl.text = selectedItems.joined(separator: ", ")
+            self.selectedMaterials = selectedItems
+        }
+    }
+}
 
 extension AddRecipeVC: RecipeImgTableViewCellDelegate {
     func didTapSelectImage() {
@@ -186,21 +212,19 @@ extension AddRecipeVC: ConfirmButtonTableViewCellDelegate {
             print("Geçerli değerler alınamadı")
             return
         }
-        
+        let createdAt = Date()
         let selectedIndexPath = IndexPath(row: 0, section: 0)
         if let cell = tvMain.cellForRow(at: selectedIndexPath) as? RecipeImgTableViewCell {
             let photo = cell.imageV.image
-            viewModel.addRecipe(photo: photo, title: name, subTitle: recipe, recipeTime: recipeTime, materials: ["a", "b"], howManyPersonFor: howManyPerson) { bool, error in
+            viewModel.addRecipe(photo: photo, title: name, subTitle: recipe, recipeTime: recipeTime, materials: selectedMaterials, howManyPersonFor: howManyPerson, createdAt: createdAt) { success, error in
                 if let error = error {
                     print(error.localizedDescription)
                 }
-                if bool {
+                if success {
                     print("Tarif başarıyla eklendi")
                     AlertManager.showAlertWithButton(on: self, title: "Başarıyla eklendi", message: "Lezzetli bir tarif eklendi :)", buttonText: "Tamam") {
                         let vc = TabBarController()
                         vc.dismiss(animated: true, completion: nil)
-//                        let VC = TabBarController()
-//                        self.navigationController?.popToViewController(VC, animated: true)
                     }
                 } else {
                     print("Tarif eklenirken bir hata oluştu")
@@ -209,6 +233,7 @@ extension AddRecipeVC: ConfirmButtonTableViewCellDelegate {
         }
     }
 }
+
 
 
 extension AddRecipeVC: UITextFieldDelegate {

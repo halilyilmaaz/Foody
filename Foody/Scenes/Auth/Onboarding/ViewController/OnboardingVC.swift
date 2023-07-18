@@ -59,6 +59,7 @@ extension OnboardingViewController: OnboardingViewDelegate {
         skipShow(true)
         let vc = LoginViewController()
         navigationController?.pushViewController(vc, animated: true)
+//        navigationController?.present(vc, animated: true)
     }
     
     func didTapContinueButton() {

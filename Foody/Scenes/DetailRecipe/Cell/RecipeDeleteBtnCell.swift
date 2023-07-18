@@ -18,7 +18,7 @@ class RecipeDeleteBtnTableViewCell: UITableViewCell {
     
     weak var delegate: RecipeDeleteBtnTableViewCellProtocol?
     
-    let btnDetail: UIButton = {
+    let btnDelete: UIButton = {
         let btn = UIButton()
         btn.setTitle("Tarifi Sil", for: .normal)
         btn.setTitleColor(.red, for: .normal)
@@ -35,16 +35,16 @@ class RecipeDeleteBtnTableViewCell: UITableViewCell {
     }
 
     func setupUI(){
-        contentView.addSubview(btnDetail)
+        contentView.addSubview(btnDelete)
 
-        btnDetail.snp.makeConstraints { make in
+        btnDelete.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview().offset(-10)
         }
         
-        btnDetail.addTarget(self, action: #selector(didTapSettingsBtn), for: .touchUpInside)
+        btnDelete.addTarget(self, action: #selector(didTapSettingsBtn), for: .touchUpInside)
     }
     
     @objc func didTapSettingsBtn(){

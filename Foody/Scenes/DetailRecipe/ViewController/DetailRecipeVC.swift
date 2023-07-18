@@ -13,6 +13,8 @@ import Kingfisher
 
 class DetailRecipeVC: UIViewController {
     
+    var viewModel: DetailViewModel = DetailViewModel()
+    
     var recipe: HomeRecipeCardModel?
     var detailId: Int?
     
@@ -113,15 +115,16 @@ extension DetailRecipeVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .materials:
             let cell = tableView.dequeueReusableCell(withIdentifier: MaterialChipCell.identifier, for: indexPath) as! MaterialChipCell
-            cell.buttonCount = recipe?.materials.count ?? 0
-            cell.chipNames = recipe?.materials ?? []
+            if let recipe = recipe {
+                cell.buttonCount = recipe.materials.count
+                cell.chipNames = recipe.materials
+            }
             return cell
         case .detail:
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeLetterTableViewCell.identifier, for: indexPath) as! RecipeLetterTableViewCell
             cell.letterLbl.text = self.recipe?.description
             return cell
         case .delete:
-            // Geçerli kullanıcının tarifi mi kontrol edin
             if let userUID = Auth.auth().currentUser?.uid, let detailId = detailId {
                 let db = Firestore.firestore()
                 let recipeRef = db.collection("recipies").document(userUID).collection(userUID).document("\(detailId)")
@@ -131,7 +134,6 @@ extension DetailRecipeVC: UITableViewDelegate, UITableViewDataSource {
                     return cell
                 }
             }
-            // Geçerli kullanıcı bulunamadıysa veya tarif kullanıcıya ait değilse boş bir hücre döndürün
             return UITableViewCell()
         }
     }
@@ -144,55 +146,28 @@ extension DetailRecipeVC: RecipeDetailImageTableViewCellDelegate {
     }
 }
 
-// MARK: Delete Recipe Will be...
 extension DetailRecipeVC: RecipeDeleteBtnTableViewCellProtocol {
     func didTapDeleteRecipeButton() {
-//        AlertManager.showAlertWithTwoButton(on: self, title: "Sil", message: "Silmek istediğinizden emin misiniz?", button1Text: "Vazgeç", button2Text: "Sil") {
-//            self.navigationController?.popToRootViewController(animated: true)
-//        } button2Action: { [weak self] in
-//            guard let userUID = Auth.auth().currentUser?.uid,
-//                  let documentID = self?.recipeDocumentID else {
-//                return
-//            }
-//
-//            let db = Firestore.firestore()
-//            let collectionRef = db.collection("recipies").document(userUID).collection(userUID)
-//            let recipeRef = collectionRef.document(documentID)
-//
-//            recipeRef.delete { error in
-//                if let error = error {
-//                    print("Hata oluştu: \(error)")
-//                } else {
-//                    print("Recipe başarıyla silindi.")
+        AlertManager.showAlertWithTwoButton(on: self, title: "Sil", message: "Silmek istediğinizden emin misiniz?", button1Text: "Vazgeç", button2Text: "Sil") {
+            self.navigationController?.popToRootViewController(animated: true)
+        } button2Action: { [weak self] in
+//            guard let recipeID = self?.recipe?.id else { return }
+//            
+//            self?.viewModel.didDelete = { [weak self] success, error in
+//                if success {
+//                    print("Tarif başarıyla silindi")
+//                    // Silme işlemi başarılı olduğunda yapılacak işlemleri burada gerçekleştirebilirsiniz.
+//                    // Örneğin, silme işlemi başarılıysa, kullanıcıyı başka bir ekrana yönlendirebilirsiniz.
 //                    self?.navigationController?.popToRootViewController(animated: true)
+//                } else if let error = error {
+//                    print("Silme işlemi başarısız: \(error.localizedDescription)")
+//                    // Silme işlemi sırasında bir hata oluştuysa burada kullanıcıya hata mesajı gösterebilirsiniz.
 //                }
 //            }
-//        }
+//            
+//            // Silme işlemini başlatın
+//            self?.viewModel.deleteRecipe(recipeID: recipeID)
+        }
     }
 }
 
-
-
-//
-//extension DetailRecipeVC: RecipeDeleteBtnTableViewCellProtocol {
-//    func didTapDeleteRecipeButton() {
-//        AlertManager.showAlertWithTwoButton(on: self, title: "Sil", message: "Silmek istediğinizden emin misiniz?", button1Text: "Vazgeç", button2Text: "Sil") {
-//            self.navigationController?.popToRootViewController(animated: true)
-//        } button2Action: {
-//            guard let userUID = Auth.auth().currentUser?.uid else {return}
-//            let db = Firestore.firestore()
-//            let collectionRef = db.collection("recipies").document(userUID).collection(userUID)
-//            let recipeRef = collectionRef.document("3")
-//
-//            recipeRef.delete { error in
-//                if let error = error {
-//                    print("Hata oluştu: \(error)")
-//                } else {
-//                    print("Recipe başarıyla silindi.")
-//                    self.navigationController?.popToRootViewController(animated: true)
-//                }
-//            }
-//        }
-//    }
-//}
-//

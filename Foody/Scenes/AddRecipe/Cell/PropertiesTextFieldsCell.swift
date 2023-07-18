@@ -7,10 +7,19 @@
 
 import UIKit
 import SnapKit
+import IQDropDownTextFieldSwift
+
+protocol PropertiesTextFieldsCellProtocol: AnyObject {
+    func didTapSelectMaterialButton()
+}
 
 class PropertiesTextFieldsCell: UITableViewCell {
     
     static let identifier = "PropertiesTFs"
+    
+    weak var delegate: PropertiesTextFieldsCellProtocol?
+    
+    var materialList: [String] = []
     
     var nameTextFieldDelegate: UITextFieldDelegate?
     var recipeTextFieldDelegate: UITextFieldDelegate?
@@ -18,6 +27,26 @@ class PropertiesTextFieldsCell: UITableViewCell {
     var preparationTimeTextFieldDelegate: UITextFieldDelegate?
     var howManyPersonTextFieldDelegate: UITextFieldDelegate?
     
+    var selectMaterialBtn: UIButton = {
+        let btn = UIButton()
+        btn.isUserInteractionEnabled = true // Tıklanabilirlik özelliği ekleniyor
+        return btn
+    }()
+    
+    var materialsTextField: UIStackView = {
+        let tf = UIStackView()
+        tf.layer.borderColor = UIColor.gray.cgColor
+        tf.layer.borderWidth = 0.1
+        tf.layer.cornerRadius = 6
+        return tf
+    }()
+    
+    var materilasLbl: UILabel = {
+        let lbl = UILabel()
+        lbl.numberOfLines = 0
+        lbl.isUserInteractionEnabled = true // Tıklanabilirlik özelliği ekleniyor
+        return lbl
+    }()
     
     var nameTextField: PaddingTextField = {
         let tf = PaddingTextField()
@@ -43,14 +72,7 @@ class PropertiesTextFieldsCell: UITableViewCell {
         tf.layer.cornerRadius = 6
         return tf
     }()
-//    var preparationTimeTextField: PaddingTextField = {
-//        let tf = PaddingTextField()
-//        tf.placeholder = "time"
-//        tf.layer.borderColor = UIColor.gray.cgColor
-//        tf.layer.borderWidth = 0.3
-//        tf.layer.cornerRadius = 6
-//        return tf
-//    }()
+
     var howManyPersonTextField: PaddingTextField = {
         let tf = PaddingTextField()
         tf.placeholder = "how many person for"
@@ -72,20 +94,40 @@ class PropertiesTextFieldsCell: UITableViewCell {
     
     
     func setupUI(){
+        contentView.addSubview(materialsTextField)
+        materialsTextField.addArrangedSubview(materilasLbl)
+        materilasLbl.addSubview(selectMaterialBtn)
         contentView.addSubview(nameTextField)
         contentView.addSubview(recipeTextField)
         contentView.addSubview(recipeTimeTextField)
-//        contentView.addSubview(preparationTimeTextField)
         contentView.addSubview(howManyPersonTextField)
         
         nameTextField.delegate = nameTextFieldDelegate
         recipeTextField.delegate = recipeTextFieldDelegate
         recipeTimeTextField.delegate = recipeTimeTextFieldDelegate
-//        preparationTimeTextField.delegate = preparationTimeTextFieldDelegate
         howManyPersonTextField.delegate = howManyPersonTextFieldDelegate
         
+        materialsTextField.snp.makeConstraints { make in
+             make.top.equalToSuperview().offset(20)
+             make.leading.equalToSuperview().offset(10)
+             make.trailing.equalToSuperview().offset(-10)
+             make.height.equalTo(40)
+        }
+        
+         selectMaterialBtn.snp.makeConstraints { make in
+             make.edges.equalToSuperview() // Tüm kenarlara yapışık olarak ayarlanıyor
+         }
+         
+         materilasLbl.snp.makeConstraints { make in
+             make.edges.equalToSuperview() // Tüm kenarlara yapışık olarak ayarlanıyor
+         }
+         
+         selectMaterialBtn.addTarget(self, action: #selector(didTapMaterialSelectBtn), for: .touchUpInside)
+         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapMaterialSelectBtn))
+         materilasLbl.addGestureRecognizer(tapGesture) // UITapGestureRecognizer ekleniyor
+         
         nameTextField.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
+            make.top.equalTo(materialsTextField.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().offset(-10)
             make.height.equalTo(40)
@@ -105,13 +147,6 @@ class PropertiesTextFieldsCell: UITableViewCell {
             make.height.equalTo(40)
         }
         
-//        preparationTimeTextField.snp.makeConstraints { make in
-//            make.top.equalTo(recipeTimeTextField.snp.bottom).offset(10)
-//            make.leading.equalToSuperview().offset(10)
-//            make.trailing.equalToSuperview().offset(-10)
-//            make.height.equalTo(40)
-//        }
-        
         howManyPersonTextField.snp.makeConstraints { make in
             make.top.equalTo(recipeTimeTextField.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(10)
@@ -119,6 +154,10 @@ class PropertiesTextFieldsCell: UITableViewCell {
             make.bottom.equalToSuperview()
             make.height.equalTo(40)
         }
+    }
+    
+    @objc func didTapMaterialSelectBtn(){
+        self.delegate?.didTapSelectMaterialButton()
     }
     
     func getTexts() -> (name: String?, recipe: String?, recipeTime: Int?, howManyPerson: Int?) {
@@ -130,6 +169,8 @@ class PropertiesTextFieldsCell: UITableViewCell {
         return (name, recipe, recipeTime, howManyPerson)
     }
 }
+
+
 
 extension PropertiesTextFieldsCell: UITextFieldDelegate {
     

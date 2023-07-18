@@ -12,7 +12,11 @@ class MaterialChipCell: UITableViewCell {
     
     static let identifier = "MaterialChipCell"
     
-    var chipNames: [String] = []
+    var chipNames: [String] = [] {
+        didSet {
+            updateButtons()
+        }
+    }
     
     let containerView: UIView = {
         let view = UIView()
@@ -37,6 +41,7 @@ class MaterialChipCell: UITableViewCell {
         }
         
         updateButtons()
+        print("\(self.chipNames)----")
     }
     
     required init?(coder: NSCoder) {
@@ -50,8 +55,12 @@ class MaterialChipCell: UITableViewCell {
         
         buttons.removeAll()
         
-        for index in 0..<buttonCount {
-            let button = createButton(title: "\(self.chipNames)")
+        // Ensure that buttonCount does not exceed the number of elements in chipNames
+        let validButtonCount = min(buttonCount, chipNames.count)
+        
+        for index in 0..<validButtonCount {
+            let title = chipNames[index]
+            let button = createButton(title: title)
             buttons.append(button)
             containerView.addSubview(button)
             
@@ -63,17 +72,14 @@ class MaterialChipCell: UITableViewCell {
             }
         }
         
-        // Önceki yükseklik kısıtlamasını kaldır
         containerView.snp.removeConstraints()
         
-        // Yeni yükseklik kısıtını ekle
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(16)
-            make.height.equalTo(buttonCount * 40)
+            make.height.equalTo(validButtonCount * 40)
         }
     }
 
-    
     private func createButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
