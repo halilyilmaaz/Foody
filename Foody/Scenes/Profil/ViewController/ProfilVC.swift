@@ -41,7 +41,7 @@ class ProfilViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         setupUI()
         registerCells()
         tvMain.delegate = self
@@ -146,15 +146,15 @@ extension ProfilViewController: UITableViewDelegate, UITableViewDataSource {
                 let recipeIndex = indexPath.row
                 let recipe = viewModel.recipes[recipeIndex]
 
-                cell.titleLbl.text = recipe.title
+                cell.titleLabel.text = recipe.title
                 cell.personCount.text = recipe.howManyPersonFor.description
-                cell.timeValue.text = recipe.recipeTime.description
+                cell.clockCount.text = recipe.recipeTime.description
                 cell.materialsCount.text = recipe.materials.count.description
 
                 if let imageURL = URL(string: recipe.photoURL) {
-                    cell.recipeImage.kf.setImage(with: imageURL)
+                    cell.imgView.kf.setImage(with: imageURL)
                 } else {
-                    cell.recipeImage.image = nil
+                    cell.imgView.image = nil
                 }
 
                 return cell

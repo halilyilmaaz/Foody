@@ -23,130 +23,59 @@ class RecipeCardTableViewCell: UITableViewCell {
     weak var delegate: RecipeCardTableViewCellDelegate?
     weak var delegateLike: RecipeCardTableViewCellLikeDelegate?
 
-    private let stackV: UIStackView = {
-        let stackV = UIStackView()
-        stackV.layer.cornerRadius = 6
-        return stackV
+    let container: UIView = {
+        let cont = UIView()
+        cont.backgroundColor = .white
+        cont.layer.cornerRadius = 6
+        cont.layer.borderWidth = 0.08
+        cont.clipsToBounds = true
+        return cont
     }()
     
-    private let container: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 6
-        view.layer.borderWidth = 0.5
-        view.layer.borderColor = UIColor.gray.cgColor
-        return view
+//    let containerBtn: UIButton = {
+//        let cont = UIButton()
+//        cont.layer.cornerRadius = 6
+//        cont.layer.borderWidth = 0.1
+//        cont.clipsToBounds = true
+//        return cont
+//    }()
+    
+    let imgView: UIImageView = {
+        let img = UIImageView()
+        img.layer.cornerRadius = 6
+        img.contentMode = .scaleAspectFill
+        img.clipsToBounds = true
+        img.backgroundColor = .blue
+        return img
     }()
     
-     let recipeImage: UIImageView = {
-        let bImg = UIImageView()
-        bImg.image = UIImage(named: ImageConstants.burger)
-        bImg.layer.cornerRadius = 6
-        bImg.contentMode = .scaleToFill
-        bImg.clipsToBounds = true
-        return bImg
-    }()
-    
-    private let emptyCardView: UIView = {
-        let view = UIView()
-        view.layer.borderWidth = 0.3
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.borderWidth = 0.5
-        view.layer.cornerRadius = 6
-        return view
-    }()
-    
-    private let bottomContainer: UIView = {
-        let view = UIView()
-        view.layer.borderWidth = 0.3
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.cornerRadius = 6
-        view.backgroundColor = .gray.withAlphaComponent(0.6)
-        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        return view
-    }()
-
-    
-    let titleLbl: UILabel = {
+    let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Title"
-        lbl.font = UIFont(name: "Helvetica", size: 24)
-        lbl.numberOfLines = 0
-        lbl.textColor = .white
+        lbl.font = UIFont(name: "Helvetica", size: 21)
+        lbl.numberOfLines = 1
+        lbl.textColor = .black
         return lbl
     }()
     
-    // MARK: Row 1
-    let row1: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        return view
-    }()
-    
-    let personIcon: UIImageView = {
-        let icon = UIImageView()
-        icon.image = UIImage(named: "person.fill")
-        return icon
-    }()
-    
-    let personCount: UILabel = {
-        let lbl = UILabel()
-        lbl.numberOfLines = 0
-        lbl.textColor = .white
-        lbl.font = .systemFont(ofSize: 12, weight: .regular)
-        return lbl
-    }()
-    
+    let personIcon = CustomIcon(title: "person.fill", size: 14, color: .black)
+    let personCount = CustomLabel(label: "2", size: 14, color: .black, weight: .medium, numberOfLines: 1)
 
-    // MARK: Row 2
-    let row2: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        return view
-    }()
-    
-    let clockIcon: UIImageView = {
-        let icon = UIImageView()
-        icon.image = UIImage(named: "person.fill")
-        return icon
-    }()
-    
-    let timeValue: UILabel = {
-        let lbl = UILabel()
-        lbl.numberOfLines = 0
-        lbl.textColor = .white
-        lbl.font = .systemFont(ofSize: 12, weight: .regular)
-        return lbl
-    }()
+    let clockIcon = CustomIcon(title: "clock.fill", size: 13, color: .black)
+    let clockCount = CustomLabel(label: "45", size: 14, color: .black, weight: .medium, numberOfLines: 1)
+    let clockLbl = CustomLabel(label: "dk pişirme", size: 14, color: .black, weight: .medium, numberOfLines: 1)
     
     
-    // MARK: Row 3
-    let row3: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        return view
-    }()
+    let materialsIcon = CustomIcon(title: "list.bullet.rectangle.fill", size: 12, color: .black)
+    let materialsCount = CustomLabel(label: "3", size: 14, color: .black, weight: .medium, numberOfLines: 1)
+    let materialsLbl = CustomLabel(label: "malzeme", size: 14, color: .black, weight: .medium, numberOfLines: 1)
     
-    let materialsIcon: UIImageView = {
-        let icon = UIImageView()
-        icon.image = UIImage(named: "person.fill")
-        return icon
-    }()
-    
-    let materialsCount: UILabel = {
-        let lbl = UILabel()
-        lbl.numberOfLines = 0
-        lbl.textColor = .white
-        lbl.font = .systemFont(ofSize: 12, weight: .regular)
-        return lbl
-    }()
-      
-    
-    private let likeButton: UIButton = {
+    let likeButton: UIButton = {
         let btn = UIButton()
-        btn.layer.borderWidth = 0.2
-        btn.layer.cornerRadius = 6
-        btn.backgroundColor = .lightGray.withAlphaComponent(0.6)
-        btn.layer.borderColor = UIColor.gray.cgColor
+        btn.layer.borderWidth = 0.1
+        btn.layer.cornerRadius = 4
+        btn.backgroundColor = .white.withAlphaComponent(0.9)
+        btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.setImage(UIImage(systemName: "suit.heart.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal), for: .normal)
         return btn
     }()
@@ -161,125 +90,92 @@ class RecipeCardTableViewCell: UITableViewCell {
     }
     
     func setupUI() {
+        contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(container)
-        container.isUserInteractionEnabled = true
-        container.addSubview(stackV)
-        stackV.addArrangedSubview(recipeImage)
-
-        stackV.addArrangedSubview(bottomContainer)
-
-        recipeImage.addSubview(emptyCardView)
-        bottomContainer.addSubview(titleLbl)
-        bottomContainer.addSubview(row1)
-        bottomContainer.addSubview(row2)
-        bottomContainer.addSubview(row3)
+        contentView.addSubview(likeButton)
+        container.addSubview(imgView)
+        container.addSubview(titleLabel)
         
-        row1.addSubview(personIcon)
-        row1.addSubview(personCount)
+        container.addSubview(personIcon)
+        container.addSubview(personCount)
         
-        row2.addSubview(clockIcon)
-        row2.addSubview(timeValue)
+        container.addSubview(clockIcon)
+        container.addSubview(clockCount)
+        container.addSubview(clockLbl)
         
-        row3.addSubview(materialsIcon)
-        row3.addSubview(materialsCount)
+        container.addSubview(materialsIcon)
+        container.addSubview(materialsCount)
+        container.addSubview(materialsLbl)
         
-        
-        bottomContainer.addSubview(likeButton)
         
         container.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
+            make.top.equalToSuperview().offset(4)
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview().offset(-10)
-            make.height.equalTo(350)
+            make.bottom.equalToSuperview().offset(-4)
+            make.height.equalTo(250)
         }
         
-        stackV.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        
+        imgView.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().offset(8)
+            make.trailing.equalToSuperview().offset(-8)
+            make.height.equalTo(150)
         }
         
-        recipeImage.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        emptyCardView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(imgView.snp.bottom).offset(8)
+            make.leading.equalToSuperview().offset(20)
         }
         
-        bottomContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(240)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        titleLbl.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(10)
-        }
-        
-        row1.snp.makeConstraints { make in
-            make.top.equalTo(titleLbl.snp.bottom).offset(5)
-            make.leading.equalToSuperview().offset(10)
-            make.width.equalTo(60)
-        }
-        
+        // MARK: person
         personIcon.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview()
-            make.width.equalTo(50)
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.equalToSuperview().offset(16)
         }
-        
         personCount.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.equalTo(personIcon.snp.trailing).offset(2)
+            make.width.equalTo(20)
         }
-        
-        
-        
-        row2.snp.makeConstraints { make in
-            make.top.equalTo(row1.snp.bottom).offset(5)
-            make.leading.equalToSuperview().offset(10)
-            make.width.equalTo(60)
-        }
-        
+
+        // MARK: clock
         clockIcon.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview()
-            make.width.equalTo(50)
+            make.top.equalTo(personIcon.snp.bottom).offset(2)
+            make.leading.equalToSuperview().offset(16)
         }
-        
-        timeValue.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview()
+        clockCount.snp.makeConstraints { make in
+            make.top.equalTo(personIcon.snp.bottom).offset(2)
+            make.leading.equalTo(clockIcon.snp.trailing).offset(2)
+            make.width.equalTo(20)
         }
-        
-        row3.snp.makeConstraints { make in
-            make.top.equalTo(row2.snp.bottom).offset(5)
-            make.leading.equalToSuperview().offset(10)
-            make.width.equalTo(60)
+        clockLbl.snp.makeConstraints { make in
+            make.top.equalTo(personIcon.snp.bottom).offset(2)
+            make.leading.equalTo(clockCount.snp.trailing).offset(4)
         }
-        
+
+        // MARK: materials
         materialsIcon.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview()
-            make.width.equalTo(50)
+            make.top.equalTo(clockIcon.snp.bottom).offset(2)
+            make.leading.equalToSuperview().offset(16)
+            make.bottom.equalToSuperview().offset(-6)
         }
-        
         materialsCount.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview()
+            make.top.equalTo(clockIcon.snp.bottom).offset(2)
+            make.leading.equalTo(materialsIcon.snp.trailing).offset(2)
+            make.bottom.equalToSuperview().offset(-6)
+            make.width.equalTo(20)
+        }
+        materialsLbl.snp.makeConstraints { make in
+            make.top.equalTo(clockIcon.snp.bottom).offset(2)
+            make.leading.equalTo(materialsCount.snp.trailing).offset(4)
+            make.bottom.equalToSuperview().offset(-6)
         }
         
         likeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview().offset(-10)
-            make.width.height.equalTo(36)
+            make.top.equalToSuperview().offset(18)
+            make.trailing.equalToSuperview().offset(-22)
+            make.height.equalTo(20)
         }
         
         likeButton.addTarget(self, action: #selector(didTapLikeBtn), for: .touchUpInside)

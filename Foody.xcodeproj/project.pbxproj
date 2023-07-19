@@ -80,6 +80,9 @@
 		9DD9BA222A6574CF0007EDB1 /* SettingsSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA212A6574CF0007EDB1 /* SettingsSectionModel.swift */; };
 		9DD9BA242A6586370007EDB1 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA232A6586370007EDB1 /* SettingsViewModel.swift */; };
 		9DD9BA262A66E2340007EDB1 /* MainCardSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA252A66E2340007EDB1 /* MainCardSearchModel.swift */; };
+		9DD9BA282A67E8330007EDB1 /* EmptyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA272A67E8330007EDB1 /* EmptyVC.swift */; };
+		9DD9BA6B2A67FD610007EDB1 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA6A2A67FD610007EDB1 /* CustomLabel.swift */; };
+		9DD9BA6D2A67FD770007EDB1 /* CustomIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9BA6C2A67FD770007EDB1 /* CustomIcon.swift */; };
 		9DE036792A2DF34E00412B4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE036782A2DF34E00412B4D /* AppDelegate.swift */; };
 		9DE0367B2A2DF34E00412B4D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE0367A2A2DF34E00412B4D /* SceneDelegate.swift */; };
 		9DE0367D2A2DF34E00412B4D /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE0367C2A2DF34E00412B4D /* HomeVC.swift */; };
@@ -182,6 +185,9 @@
 		9DD9BA212A6574CF0007EDB1 /* SettingsSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionModel.swift; sourceTree = "<group>"; };
 		9DD9BA232A6586370007EDB1 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		9DD9BA252A66E2340007EDB1 /* MainCardSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardSearchModel.swift; sourceTree = "<group>"; };
+		9DD9BA272A67E8330007EDB1 /* EmptyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyVC.swift; sourceTree = "<group>"; };
+		9DD9BA6A2A67FD610007EDB1 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
+		9DD9BA6C2A67FD770007EDB1 /* CustomIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIcon.swift; sourceTree = "<group>"; };
 		9DE036752A2DF34E00412B4D /* Foody.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Foody.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DE036782A2DF34E00412B4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9DE0367A2A2DF34E00412B4D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -569,6 +575,9 @@
 				9D71ACFC2A33E0D600463620 /* DividerAndLabel.swift */,
 				9D71ACFE2A347C1800463620 /* PaddingTextField.swift */,
 				9D71AD042A36244000463620 /* IconWithLabel.swift */,
+				9DD9BA272A67E8330007EDB1 /* EmptyVC.swift */,
+				9DD9BA6C2A67FD770007EDB1 /* CustomIcon.swift */,
+				9DD9BA6A2A67FD610007EDB1 /* CustomLabel.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -1019,6 +1028,8 @@
 				9DE036C72A2DFDEC00412B4D /* RegisterVC.swift in Sources */,
 				9D71AD072A36260000463620 /* UILabel+Extensions.swift in Sources */,
 				9DD508322A3CB0C3006C9E67 /* AuthHeaderView.swift in Sources */,
+				9DD9BA6D2A67FD770007EDB1 /* CustomIcon.swift in Sources */,
+				9DD9BA6B2A67FD610007EDB1 /* CustomLabel.swift in Sources */,
 				9D929EB32A43B14000D227BD /* someExtension.swift in Sources */,
 				9DE036D82A2E1B5900412B4D /* ImageConstants.swift in Sources */,
 				9DD9BA082A55FFD50007EDB1 /* SearchService.swift in Sources */,
@@ -1054,6 +1065,7 @@
 				9D929E9F2A3FA12600D227BD /* OnboardingView.swift in Sources */,
 				9DD9BA222A6574CF0007EDB1 /* SettingsSectionModel.swift in Sources */,
 				9DD9BA262A66E2340007EDB1 /* MainCardSearchModel.swift in Sources */,
+				9DD9BA282A67E8330007EDB1 /* EmptyVC.swift in Sources */,
 				9DD5082F2A3CA855006C9E67 /* AlertManager.swift in Sources */,
 				9D929ED02A4891E000D227BD /* MaterialListCell.swift in Sources */,
 				9DE036BA2A2DF85600412B4D /* TabBarViewController.swift in Sources */,

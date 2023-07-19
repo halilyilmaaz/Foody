@@ -14,6 +14,7 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
     
     private let tvMain: UITableView = {
         let tv = UITableView()
+        tv.backgroundColor = .secondarySystemBackground
         tv.separatorStyle = .none
         tv.showsVerticalScrollIndicator = false
         return tv
@@ -21,14 +22,11 @@ class HomeViewController: UIViewController, UIViewControllerTransitioningDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         self.tvMain.delegate = self
         self.tvMain.dataSource = self
         setupUI()
         registerCell()
-        
-//        let share = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
-//        navigationItem.rightBarButtonItem = share
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,14 +75,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegateLike = self
 
         let recipe = viewModel.recipies[indexPath.row]
-        cell.titleLbl.text = recipe.title
+        cell.titleLabel.text = recipe.title
         cell.personCount.text = recipe.howManyPersonFor.description
-        cell.timeValue.text = recipe.recipeTime.description
+        cell.clockCount.text = recipe.recipeTime.description
         cell.materialsCount.text = recipe.materials.count.description
         if let imageURL = URL(string: recipe.photoURL) {
-            cell.recipeImage.kf.setImage(with: imageURL)
+            cell.imgView.kf.setImage(with: imageURL)
         } else {
-            cell.recipeImage.image = nil
+            cell.imgView.image = nil
         }
         return cell
     }
